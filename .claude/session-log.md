@@ -7,3 +7,21 @@
 - 14:12 Run: cmd.exe //c start "" "C:\Users\user\Desktop\projec
 - 14:13 Skill: /gh-pages-deploy
 - 14:13 Run: gh auth status 2>&1
+- 14:13 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:13 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:13 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:15 Run: until [ "$(curl -s -o /dev/null -w '%{http_code}' 
+- 14:15 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:22 Edit: poster.html
+- 14:23 Edit: poster.html
+- 14:23 Edit: poster.html
+- 14:23 Edit: poster.html
+- 14:24 Edit: poster.html
+- 14:43 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:43 Read: _site_preview.png
+- 14:44 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:46 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:46 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:46 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:47 Run: cd "C:/Users/user/Desktop/projects/Paper-agent lea
+- 14:47 Edit: index.html
