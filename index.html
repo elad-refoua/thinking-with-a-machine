@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Thinking With a Machine — Talk to the agent</title>
+<meta name="description" content="Live demonstration of the AI agent from the CLPsych 2026 paper 'Thinking With a Machine.' Conference attendees can chat with the agent through ChatGPT, Gemini, or Claude.">
+<style>
+  :root {
+    --bg: #fafaf7;
+    --fg: #14202e;
+    --muted: #5d6d7e;
+    --accent: #1f6f8b;
+    --accent-dark: #0a1a2f;
+    --card: #ffffff;
+    --warn-bg: #fff8e1;
+    --warn-border: #c9a227;
+    --warn-fg: #6b4f00;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px 22px 48px;
+  }
+  header {
+    text-align: center;
+    padding-top: 12px;
+    padding-bottom: 8px;
+  }
+  .eyebrow {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: 'Georgia', serif;
+    font-size: clamp(1.85rem, 5vw, 2.5rem);
+    line-height: 1.1;
+    color: var(--accent-dark);
+    margin: 6px 0 8px;
+    font-weight: 700;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-style: italic;
+    font-size: clamp(1.05rem, 3vw, 1.2rem);
+    margin: 0 0 24px;
+  }
+  .agent-portrait {
+    display: block;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    background: #e9e6dd;
+    object-fit: cover;
+    box-shadow: 0 8px 28px rgba(10, 26, 47, 0.12);
+    border: 4px solid #fff;
+  }
+  .welcome {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--fg);
+    margin: 4px 0 32px;
+  }
+  .welcome strong { color: var(--accent-dark); }
+
+  .options-label {
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 600;
+    text-align: center;
+    margin: 10px 0 14px;
+  }
+
+  .options {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--card);
+    border: 1.5px solid #e1e4e8;
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    text-decoration: none;
+    color: var(--fg);
+    transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+  }
+  .option:hover, .option:focus-visible {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(31, 111, 139, 0.12);
+    outline: none;
+  }
+  .option .icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .option.chatgpt .icon { background: #10a37f; color: #fff; }
+  .option.gemini  .icon { background: #4285f4; color: #fff; }
+  .option.claude  .icon { background: #d97757; color: #fff; }
+  .option .label {
+    flex: 1;
+    min-width: 0;
+  }
+  .option .label .title {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--accent-dark);
+  }
+  .option .label .sub {
+    font-size: 0.88rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .option .arrow {
+    color: var(--muted);
+    font-size: 1.4rem;
+  }
+  .option[aria-disabled="true"] {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .disclaimer {
+    background: var(--warn-bg);
+    border: 1.5px solid var(--warn-border);
+    color: var(--warn-fg);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 8px 0 28px;
+  }
+  .disclaimer strong { color: #4a3700; }
+
+  .paper-link {
+    display: block;
+    background: var(--accent-dark);
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    transition: background 0.12s ease;
+    margin-bottom: 28px;
+  }
+  .paper-link:hover, .paper-link:focus-visible {
+    background: #142a48;
+    outline: none;
+  }
+  .paper-link .arrow { font-weight: 400; opacity: 0.7; margin-left: 6px; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.55;
+    border-top: 1px solid #e1e4e8;
+    padding-top: 20px;
+  }
+  footer .authors { font-weight: 600; color: var(--fg); }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">CLPsych 2026 · ACL Workshop · Paper #6</div>
+    <h1>Thinking With a Machine</h1>
+    <div class="subtitle">Talk to the agent from the paper.</div>
+  </header>
+
+  <!--
+    To replace the agent portrait:
+    1. Generate the image with the Nano Banana / Gemini prompt in README.md.
+    2. Save it as `agent.png` next to this file (square aspect ratio, ≥600×600 px).
+    The CSS above shows it as a circle, so a square source works best.
+  -->
+  <img class="agent-portrait" src="agent.jpg" alt="Stylized portrait of the demo agent" onerror="this.style.display='none'">
+
+  <p class="welcome">
+    Welcome. I'm the AI agent that narrates this paper.<br>
+    Pick a platform you have access to and we can talk.
+  </p>
+
+  <div class="options-label">Chat with the agent on</div>
+  <nav class="options" aria-label="Bot platforms">
+    <!-- Replace each href with the actual bot URL on that platform before deploying. -->
+    <a class="option chatgpt" href="CHATGPT_BOT_URL_HERE" target="_blank" rel="noopener">
+      <div class="icon" aria-hidden="true">G</div>
+      <div class="label">
+        <div class="title">ChatGPT</div>
+        <div class="sub">Custom GPT — works for anyone with a free ChatGPT account.</div>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+    </a>
+
+    <a class="option gemini" href="GEMINI_BOT_URL_HERE" target="_blank" rel="noopener">
+      <div class="icon" aria-hidden="true">✦</div>
+      <div class="label">
+        <div class="title">Gemini Gem</div>
+        <div class="sub">Same agent on Google's Gemini — sign in with your Google account.</div>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+    </a>
+
+    <a class="option claude" href="CLAUDE_BOT_URL_HERE" target="_blank" rel="noopener">
+      <div class="icon" aria-hidden="true">✱</div>
+      <div class="label">
+        <div class="title">Claude</div>
+        <div class="sub">For visitors with a Claude account. Same prompt, same agent.</div>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+    </a>
+  </nav>
+
+  <aside class="disclaimer" role="note">
+    <strong>About this demo.</strong> The agent on the other side of these links is a public demonstration scoped strictly to this paper. It has <strong>no access to patient data</strong>, no access to clinical records, and no access to the actual research environment described in the manuscript. It can only walk you through the paper's argument, methodology, and open ethical questions. If you ask it for something out of scope, it will redirect you back to the paper.
+  </aside>
+
+  <a class="paper-link" href="PAPER_DOWNLOAD_URL_HERE" target="_blank" rel="noopener">
+    Read the full paper
+    <span class="arrow">↗</span>
+  </a>
+
+  <footer>
+    <div class="authors">Elad Refoua &nbsp;·&nbsp; Mor Bar</div>
+    <div>Department of Psychology, Bar-Ilan University</div>
+    <div style="margin-top: 6px;">CLPsych 2026 — co-located with ACL · July 4, 2026</div>
+  </footer>
+
+</div>
+</body>
+</html>
