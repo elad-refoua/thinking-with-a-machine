@@ -120,12 +120,12 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    font-size: 1.4rem;
-    font-weight: 700;
+    background: #fff;
+    border: 1px solid #e1e4e8;
   }
-  .option.chatgpt .icon { background: #10a37f; color: #fff; }
-  .option.gemini  .icon { background: #4285f4; color: #fff; }
-  .option.claude  .icon { background: #d97757; color: #fff; }
+  .option .icon svg { width: 28px; height: 28px; display: block; }
+  .option.chatgpt .icon svg { color: #000; }
+  .option.gemini  .icon svg { color: #4285f4; }
   .option .label {
     flex: 1;
     min-width: 0;
@@ -215,9 +215,19 @@
 
   <div class="options-label">Chat with the agent on</div>
   <nav class="options" aria-label="Bot platforms">
-    <!-- Replace each href with the actual bot URL on that platform before deploying. -->
+    <!--
+      To use the official brand logos: download the trademarked SVGs from each
+      company's press kit (https://openai.com/brand and Google's brand resource
+      center), save them as chatgpt-logo.svg and gemini-logo.svg in this folder,
+      and replace the inline <svg>...</svg> below with <img src="chatgpt-logo.svg" alt="">.
+      The inline icons below are simple, generic geometric placeholders.
+    -->
     <a class="option chatgpt" href="CHATGPT_BOT_URL_HERE" target="_blank" rel="noopener">
-      <div class="icon" aria-hidden="true">G</div>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <div class="label">
         <div class="title">ChatGPT</div>
         <div class="sub">Custom GPT — works for anyone with a free ChatGPT account.</div>
@@ -226,19 +236,14 @@
     </a>
 
     <a class="option gemini" href="GEMINI_BOT_URL_HERE" target="_blank" rel="noopener">
-      <div class="icon" aria-hidden="true">✦</div>
+      <div class="icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6L12 1z"/>
+        </svg>
+      </div>
       <div class="label">
         <div class="title">Gemini Gem</div>
         <div class="sub">Same agent on Google's Gemini — sign in with your Google account.</div>
-      </div>
-      <div class="arrow" aria-hidden="true">→</div>
-    </a>
-
-    <a class="option claude" href="CLAUDE_BOT_URL_HERE" target="_blank" rel="noopener">
-      <div class="icon" aria-hidden="true">✱</div>
-      <div class="label">
-        <div class="title">Claude</div>
-        <div class="sub">For visitors with a Claude account. Same prompt, same agent.</div>
       </div>
       <div class="arrow" aria-hidden="true">→</div>
     </a>
